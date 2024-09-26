@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { RiCloseCircleFill, RiInstagramLine, RiFacebookCircleFill } from "react-icons/ri"
+import { RiCloseCircleFill, RiInstagramLine, RiFacebookCircleFill, RiMenuFill } from "react-icons/ri"
 import "./styles.css"
 
 const text_content = {
@@ -49,6 +49,8 @@ export function App() {
         gallery: useRef(),
         contactandmedia: useRef()
     }
+    const [isPopUpMenuOpen, setIsPopUpMenuOpen] = useState(false)
+    const popUpButtonsContRef = useRef()
 
     function disarmImgModal() {
         setImgModalInfo({...imgModalInfo, isActive: false})
@@ -71,6 +73,12 @@ export function App() {
         })
     }
 
+    function open_close_menu() {
+        popUpButtonsContRef.current.style.opacity = isPopUpMenuOpen ? "0" : "1"
+        popUpButtonsContRef.current.style.translate = isPopUpMenuOpen ? "0 -150%" : "0 0"
+        setIsPopUpMenuOpen(!isPopUpMenuOpen)
+    }
+
     return <>
         { imgModalInfo.isActive && <ImageModal disarmImgModal={disarmImgModal} img={imgModalInfo.img} description={imgModalInfo.description}/> }
         <section className="presentation_section" id="home" ref={sectionRefs.home}>
@@ -83,11 +91,22 @@ export function App() {
             <div className="nav_logo" href="#home" onClick={(e)=>{scrollToSection(e, "home")}}>
                 <img src="./logo.png" alt="jhon solutions llc's logo" />
             </div>
-            <ul>
+            <ul id="wide_navbar_buttons_cont" className="wide_navbar_buttons_cont">
                 <a href="#services" onClick={(e)=>{scrollToSection(e, "services")}}><li>Servicios</li></a>
                 <a href="#quote" onClick={(e)=>{scrollToSection(e, "quote")}}><li>Cotización gratuita</li></a>
                 <a href="#gallery" onClick={(e)=>{scrollToSection(e, "gallery")}}><li>Galería</li></a>
                 <a href="#contactandmedia" onClick={(e)=>{scrollToSection(e, "contactandmedia")}}><li>Contacto y redes</li></a>
+                <a href="#"><li>Eng/Esp</li></a>
+            </ul>
+
+            <button id="pop_up_opener_button" className="pop_up_opener" onClick={open_close_menu}>
+                <RiMenuFill color="var(--d_blue)" size="100%" />
+            </button>
+            <ul id="pop_up_buttons_cont" className="pop_up_buttons_cont" ref={popUpButtonsContRef}>
+                <a href="#services" onClick={(e)=>{open_close_menu(); scrollToSection(e, "services")}}><li>Servicios</li></a>
+                <a href="#quote" onClick={(e)=>{open_close_menu(); scrollToSection(e, "quote")}}><li>Cotización gratuita</li></a>
+                <a href="#gallery" onClick={(e)=>{open_close_menu(); scrollToSection(e, "gallery")}}><li>Galería</li></a>
+                <a href="#contactandmedia" onClick={(e)=>{open_close_menu(); scrollToSection(e, "contactandmedia")}}><li>Contacto y redes</li></a>
                 <a href="#"><li>Eng/Esp</li></a>
             </ul>
         </nav>
